@@ -10,7 +10,7 @@ public class GeneratorTest {
     @Test
     public void test_single() {
         assertEquals("select * from customer where (id='1')",SQLGenerator.generateSQL("(id='1')"));
-        assertEquals("select * from customer where (contact_name<>'aaa')",SQLGenerator.generateSQL("(contact_name<>'aaa')"));
+        assertEquals("select * from customer where (contactName<>'aaa')",SQLGenerator.generateSQL("(contactName<>'aaa')"));
     }
 
     @Test
@@ -21,8 +21,8 @@ public class GeneratorTest {
 
     @Test
     public void test_OR() {
-        assertEquals("select * from customer where ((id='1') or (region='cn'))",
-                SQLGenerator.generateSQL("(id='1') OR (region='cn')"));
+        assertEquals("select * from customer where ((id='1') or (region='CN'))",
+                SQLGenerator.generateSQL("(id='1') OR (region='CN')"));
     }
 
     @Test
@@ -33,7 +33,7 @@ public class GeneratorTest {
 
     @Test
     public void test_complex() {
-        assertEquals("select * from customer where (((id='1') and ((region='cn') or (company_name='htsc'))) and not (postal_code=3))",
-                SQLGenerator.generateSQL("(id='1') AND ((region='cn') OR (company_name='htsc')) AND !(postal_code=3)"));
+        assertEquals("select * from customer where (((id='1') and ((region='CN') or (companyName='HTSC'))) and not (postalCode=3))",
+                SQLGenerator.generateSQL("(id='1') AND ((region='CN') OR (companyName='HTSC')) AND !(postalCode=3)"));
     }
 }

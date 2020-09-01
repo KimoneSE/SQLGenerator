@@ -13,22 +13,25 @@ public class SQLGenerator {
         String exprStr = "";
 
         StringBuilder optBuilder = new StringBuilder();
+        boolean isConnectorStart = false;
         for(int i=0;i<input.length();i++) {
             char ch = input.charAt(i);
-            if((ch>='A'&&ch<='Z') || ch=='!') {
+            if((i>1&&input.charAt(i-1)==32&&input.charAt(i-2)==')') || ch=='!') {
+                isConnectorStart=true;
                 optBuilder.append(ch);
             }else{
-                if(optBuilder.length()>0){
+                if((i>0&&input.charAt(i-1)=='!') || (ch==32 && optBuilder.length()>0)) {
+                    isConnectorStart=false;
                     String curOpt = optBuilder.toString();
                     if(optStack.empty()){
                         optStack.push(curOpt);
                     } else {
                         compareAndCal(optStack,expressionStack,curOpt);
                     }
-                    charStack.push(ch);
+                    if (ch!=32) charStack.push(ch);
                     optBuilder.delete(0,optBuilder.length());
-                } else if(ch!=')') {
-                    charStack.push(ch);
+                }else if(ch!=')') {
+                    if(!isConnectorStart&&ch!=32) charStack.push(ch);
                 }else {
                     exprStr = ")";
                     while(true) {
@@ -43,6 +46,8 @@ public class SQLGenerator {
                         }
                     }
                 }
+                if(isConnectorStart) optBuilder.append(ch);
+
             }
 
             if(ch=='('&&input.charAt(i+1)=='('){
@@ -123,5 +128,5 @@ public class SQLGenerator {
         }
         return 0;
     }
-    
+
 }
